@@ -1,9 +1,26 @@
-```python
-# We're going to explore the "Ames Housing" dataset, which contains information about houses in Ames, Iowa.
-# The dataset is available at https://www.kaggle.com/datasets/shashanknecrothapa/ames-housing-dataset
-# We'll be learning about data exploration, cleaning, and visualization using pandas and seaborn.
-```
+# Ames Housing Dataset EDA
 
+This project is a complete exploratory data analysis (EDA) of the Ames Housing dataset, using Python, Pandas, Seaborn, and Matplotlib.
+
+We're going to explore the "Ames Housing" dataset, which contains information about houses in Ames, Iowa.
+The dataset is available at https://www.kaggle.com/datasets/shashanknecrothapa/ames-housing-dataset
+We'll be learning about data exploration, cleaning, and visualization using pandas and seaborn.
+
+## 📄 Project Files
+
+- `AmesHousingDataset.ipynb` — the original notebook
+- `AmesHousingDataset.pdf` — PDF export
+- `README.md` — this file, auto-generated from the notebook
+
+## 🧠 Summary of Insights
+
+- `OverallQual`, `GrLivArea`, and `GarageArea` show high correlation with sale price
+- Feature engineering improved data quality and interpretability
+- Outliers were identified but retained to preserve high-value property data
+
+## Preview
+
+👇 The full notebook is rendered below...
 
 ```python
 # Import necessary libraries
@@ -13,16 +30,12 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 ```
 
-
 ```python
 # Import the dataset
 df = pd.read_csv('C:\\Users\\nikrc\\OneDrive\\Desktop\\Datasets\\AmesHousing.csv')
 pd.set_option('display.max_columns', None)  # To Show all columns in the DataFrame
 df.head(10)
 ```
-
-
-
 
 <div>
 <style scoped>
@@ -37,6 +50,7 @@ df.head(10)
     .dataframe thead th {
         text-align: right;
     }
+
 </style>
 <table border="1" class="dataframe">
   <thead>
@@ -981,9 +995,6 @@ df.head(10)
 </table>
 </div>
 
-
-
-
 ```python
 # Why do we use this?
 # To suppress FutureWarnings that may arise from using deprecated features in libraries like pandas or numpy.
@@ -993,7 +1004,6 @@ import warnings
 warnings.filterwarnings('ignore',category=FutureWarning)
 ```
 
-
 ```python
 # Check the shape of the Dataset
 print(f"The dataset has {df.shape[0]} rows and {df.shape[1]} columns.")
@@ -1001,8 +1011,6 @@ print(f"The dataset has {df.shape[0]} rows and {df.shape[1]} columns.")
 ```
 
     The dataset has 2930 rows and 82 columns.
-    
-
 
 ```python
 # View Columns types and non-null counts
@@ -1012,104 +1020,99 @@ print(df.info())
     <class 'pandas.core.frame.DataFrame'>
     RangeIndex: 2930 entries, 0 to 2929
     Data columns (total 82 columns):
-     #   Column           Non-Null Count  Dtype  
-    ---  ------           --------------  -----  
-     0   Order            2930 non-null   int64  
-     1   PID              2930 non-null   int64  
-     2   MS SubClass      2930 non-null   int64  
-     3   MS Zoning        2930 non-null   object 
+     #   Column           Non-Null Count  Dtype
+    ---  ------           --------------  -----
+     0   Order            2930 non-null   int64
+     1   PID              2930 non-null   int64
+     2   MS SubClass      2930 non-null   int64
+     3   MS Zoning        2930 non-null   object
      4   Lot Frontage     2440 non-null   float64
-     5   Lot Area         2930 non-null   int64  
-     6   Street           2930 non-null   object 
-     7   Alley            198 non-null    object 
-     8   Lot Shape        2930 non-null   object 
-     9   Land Contour     2930 non-null   object 
-     10  Utilities        2930 non-null   object 
-     11  Lot Config       2930 non-null   object 
-     12  Land Slope       2930 non-null   object 
-     13  Neighborhood     2930 non-null   object 
-     14  Condition 1      2930 non-null   object 
-     15  Condition 2      2930 non-null   object 
-     16  Bldg Type        2930 non-null   object 
-     17  House Style      2930 non-null   object 
-     18  Overall Qual     2930 non-null   int64  
-     19  Overall Cond     2930 non-null   int64  
-     20  Year Built       2930 non-null   int64  
-     21  Year Remod/Add   2930 non-null   int64  
-     22  Roof Style       2930 non-null   object 
-     23  Roof Matl        2930 non-null   object 
-     24  Exterior 1st     2930 non-null   object 
-     25  Exterior 2nd     2930 non-null   object 
-     26  Mas Vnr Type     1155 non-null   object 
+     5   Lot Area         2930 non-null   int64
+     6   Street           2930 non-null   object
+     7   Alley            198 non-null    object
+     8   Lot Shape        2930 non-null   object
+     9   Land Contour     2930 non-null   object
+     10  Utilities        2930 non-null   object
+     11  Lot Config       2930 non-null   object
+     12  Land Slope       2930 non-null   object
+     13  Neighborhood     2930 non-null   object
+     14  Condition 1      2930 non-null   object
+     15  Condition 2      2930 non-null   object
+     16  Bldg Type        2930 non-null   object
+     17  House Style      2930 non-null   object
+     18  Overall Qual     2930 non-null   int64
+     19  Overall Cond     2930 non-null   int64
+     20  Year Built       2930 non-null   int64
+     21  Year Remod/Add   2930 non-null   int64
+     22  Roof Style       2930 non-null   object
+     23  Roof Matl        2930 non-null   object
+     24  Exterior 1st     2930 non-null   object
+     25  Exterior 2nd     2930 non-null   object
+     26  Mas Vnr Type     1155 non-null   object
      27  Mas Vnr Area     2907 non-null   float64
-     28  Exter Qual       2930 non-null   object 
-     29  Exter Cond       2930 non-null   object 
-     30  Foundation       2930 non-null   object 
-     31  Bsmt Qual        2850 non-null   object 
-     32  Bsmt Cond        2850 non-null   object 
-     33  Bsmt Exposure    2847 non-null   object 
-     34  BsmtFin Type 1   2850 non-null   object 
+     28  Exter Qual       2930 non-null   object
+     29  Exter Cond       2930 non-null   object
+     30  Foundation       2930 non-null   object
+     31  Bsmt Qual        2850 non-null   object
+     32  Bsmt Cond        2850 non-null   object
+     33  Bsmt Exposure    2847 non-null   object
+     34  BsmtFin Type 1   2850 non-null   object
      35  BsmtFin SF 1     2929 non-null   float64
-     36  BsmtFin Type 2   2849 non-null   object 
+     36  BsmtFin Type 2   2849 non-null   object
      37  BsmtFin SF 2     2929 non-null   float64
      38  Bsmt Unf SF      2929 non-null   float64
      39  Total Bsmt SF    2929 non-null   float64
-     40  Heating          2930 non-null   object 
-     41  Heating QC       2930 non-null   object 
-     42  Central Air      2930 non-null   object 
-     43  Electrical       2929 non-null   object 
-     44  1st Flr SF       2930 non-null   int64  
-     45  2nd Flr SF       2930 non-null   int64  
-     46  Low Qual Fin SF  2930 non-null   int64  
-     47  Gr Liv Area      2930 non-null   int64  
+     40  Heating          2930 non-null   object
+     41  Heating QC       2930 non-null   object
+     42  Central Air      2930 non-null   object
+     43  Electrical       2929 non-null   object
+     44  1st Flr SF       2930 non-null   int64
+     45  2nd Flr SF       2930 non-null   int64
+     46  Low Qual Fin SF  2930 non-null   int64
+     47  Gr Liv Area      2930 non-null   int64
      48  Bsmt Full Bath   2928 non-null   float64
      49  Bsmt Half Bath   2928 non-null   float64
-     50  Full Bath        2930 non-null   int64  
-     51  Half Bath        2930 non-null   int64  
-     52  Bedroom AbvGr    2930 non-null   int64  
-     53  Kitchen AbvGr    2930 non-null   int64  
-     54  Kitchen Qual     2930 non-null   object 
-     55  TotRms AbvGrd    2930 non-null   int64  
-     56  Functional       2930 non-null   object 
-     57  Fireplaces       2930 non-null   int64  
-     58  Fireplace Qu     1508 non-null   object 
-     59  Garage Type      2773 non-null   object 
+     50  Full Bath        2930 non-null   int64
+     51  Half Bath        2930 non-null   int64
+     52  Bedroom AbvGr    2930 non-null   int64
+     53  Kitchen AbvGr    2930 non-null   int64
+     54  Kitchen Qual     2930 non-null   object
+     55  TotRms AbvGrd    2930 non-null   int64
+     56  Functional       2930 non-null   object
+     57  Fireplaces       2930 non-null   int64
+     58  Fireplace Qu     1508 non-null   object
+     59  Garage Type      2773 non-null   object
      60  Garage Yr Blt    2771 non-null   float64
-     61  Garage Finish    2771 non-null   object 
+     61  Garage Finish    2771 non-null   object
      62  Garage Cars      2929 non-null   float64
      63  Garage Area      2929 non-null   float64
-     64  Garage Qual      2771 non-null   object 
-     65  Garage Cond      2771 non-null   object 
-     66  Paved Drive      2930 non-null   object 
-     67  Wood Deck SF     2930 non-null   int64  
-     68  Open Porch SF    2930 non-null   int64  
-     69  Enclosed Porch   2930 non-null   int64  
-     70  3Ssn Porch       2930 non-null   int64  
-     71  Screen Porch     2930 non-null   int64  
-     72  Pool Area        2930 non-null   int64  
-     73  Pool QC          13 non-null     object 
-     74  Fence            572 non-null    object 
-     75  Misc Feature     106 non-null    object 
-     76  Misc Val         2930 non-null   int64  
-     77  Mo Sold          2930 non-null   int64  
-     78  Yr Sold          2930 non-null   int64  
-     79  Sale Type        2930 non-null   object 
-     80  Sale Condition   2930 non-null   object 
-     81  SalePrice        2930 non-null   int64  
+     64  Garage Qual      2771 non-null   object
+     65  Garage Cond      2771 non-null   object
+     66  Paved Drive      2930 non-null   object
+     67  Wood Deck SF     2930 non-null   int64
+     68  Open Porch SF    2930 non-null   int64
+     69  Enclosed Porch   2930 non-null   int64
+     70  3Ssn Porch       2930 non-null   int64
+     71  Screen Porch     2930 non-null   int64
+     72  Pool Area        2930 non-null   int64
+     73  Pool QC          13 non-null     object
+     74  Fence            572 non-null    object
+     75  Misc Feature     106 non-null    object
+     76  Misc Val         2930 non-null   int64
+     77  Mo Sold          2930 non-null   int64
+     78  Yr Sold          2930 non-null   int64
+     79  Sale Type        2930 non-null   object
+     80  Sale Condition   2930 non-null   object
+     81  SalePrice        2930 non-null   int64
     dtypes: float64(11), int64(28), object(43)
     memory usage: 1.8+ MB
     None
-    
-
 
 ```python
 # Descriptive statistics of the dataset
 # This provides a summary of the central tendency, dispersion, and shape of the dataset's distribution,
 df.describe().T
 ```
-
-
-
 
 <div>
 <style scoped>
@@ -1124,6 +1127,7 @@ df.describe().T
     .dataframe thead th {
         text-align: right;
     }
+
 </style>
 <table border="1" class="dataframe">
   <thead>
@@ -1573,16 +1577,10 @@ df.describe().T
 </table>
 </div>
 
-
-
-
 ```python
 # Total Missing Values per Column
 df.isnull().sum().sort_values(ascending=False).head(20)
 ```
-
-
-
 
     Pool QC           2917
     Misc Feature      2824
@@ -1606,18 +1604,13 @@ df.isnull().sum().sort_values(ascending=False).head(20)
     Bsmt Half Bath       2
     dtype: int64
 
-
-
-
 ```python
 df['Lot Frontage'].fillna(df['Lot Frontage'].mean(),inplace=True)
 ```
 
-
 ```python
 df['Alley'].fillna(df['Alley'].mode()[0],inplace=True)
 ```
-
 
 ```python
 # Total Missing Values per Column
@@ -1628,8 +1621,6 @@ print(missing_values[missing_values > 0].sort_values(ascending=False))
 
     Percentage of Missing Values per Column:
     Series([], dtype: float64)
-    
-
 
 ```python
 #  Dropping Columns with more than 50% missing values
@@ -1637,7 +1628,6 @@ threshold = 0.5
 cols = df.columns[missing_values > threshold]
 df.drop(cols, axis=1, inplace=True)
 ```
-
 
 ```python
 
@@ -1652,7 +1642,6 @@ for col in median_cols:
     df[col].fillna(df[col].median(), inplace=True)
 ```
 
-
 ```python
 # Checking the percentage of missing values after filling
 print("Percentage of Missing Values after filling:")
@@ -1660,7 +1649,7 @@ print("Percentage of Missing Values after filling:")
 ```
 
     Percentage of Missing Values after filling:
-    
+
 
 
 
@@ -1670,7 +1659,7 @@ print("Percentage of Missing Values after filling:")
     MS SubClass       0.0
     MS Zoning         0.0
     Lot Frontage      0.0
-                     ... 
+                     ...
     Mo Sold           0.0
     Yr Sold           0.0
     Sale Type         0.0
@@ -1678,16 +1667,12 @@ print("Percentage of Missing Values after filling:")
     SalePrice         0.0
     Length: 66, dtype: float64
 
-
-
-
 ```python
 # What is Correlation Matrix ?
 # The correlation matrix is a table that shows the correlation coefficients between many variables.
 # Each cell in the table displays the correlation between two variables.
 # The value is between -1 and 1. A value closer to 1 means a strong positive correlation, while a value closer to -1 means a strong negative correlation.
 ```
-
 
 ```python
 # Correlation Matrix
@@ -1703,12 +1688,7 @@ plt.title("Correlation Matrix")
 plt.show()
 ```
 
-
-    
 ![png](AmesHousingDataset_files/AmesHousingDataset_15_0.png)
-    
-
-
 
 ```python
 # Price Distribution
@@ -1720,18 +1700,12 @@ plt.ylabel("Frequency")
 plt.show()
 ```
 
-
-    
 ![png](AmesHousingDataset_files/AmesHousingDataset_16_0.png)
-    
-
-
 
 ```python
 # Clearly the distribution is right skewed, indicating that most houses are sold at lower prices, with fewer houses sold at higher prices.
 # There are a few outliers on the higher end of the price spectrum, which is common in real estate data.
 ```
-
 
 ```python
 # There's a way to find outliers using the Interquartile Range (IQR) method.
@@ -1765,8 +1739,6 @@ print(f"Number of outliers in SalePrice: {len(outliers)}")
 ```
 
     Number of outliers in SalePrice: 137
-    
-
 
 ```python
 # Visualizing Outliers
@@ -1781,12 +1753,7 @@ plt.xlabel("Sales Price")
 plt.show()
 ```
 
-
-    
 ![png](AmesHousingDataset_files/AmesHousingDataset_19_0.png)
-    
-
-
 
 ```python
 # What can we conclude from the boxplot?
@@ -1794,7 +1761,6 @@ plt.show()
 # The whiskers extend to the lower and upper bounds, while the outliers are represented as individual points beyond these bounds.
 # This indicates that while most houses are sold at lower prices, there are a few high-value properties that significantly impact the average price.
 ```
-
 
 ```python
 # Finding highly correlated features with SalePrice
@@ -1809,8 +1775,6 @@ print(highly_correlated_features)
 
     Features highly correlated with SalePrice:
     ['Overall Qual', 'Year Built', 'Year Remod/Add', 'Total Bsmt SF', '1st Flr SF', 'Gr Liv Area', 'Full Bath', 'Garage Cars', 'Garage Area', 'SalePrice', 'LogSalePrice']
-    
-
 
 ```python
 #  Visualizing the relationship between SalePrice and highly correlated features
@@ -1827,12 +1791,7 @@ plt.show()
 
 ```
 
-
-    
 ![png](AmesHousingDataset_files/AmesHousingDataset_22_0.png)
-    
-
-
 
 ```python
 # How does Overall Qual affect SalePrice?
@@ -1843,12 +1802,7 @@ plt.ylabel("Sale Price")
 plt.show()
 ```
 
-
-    
 ![png](AmesHousingDataset_files/AmesHousingDataset_23_0.png)
-    
-
-
 
 ```python
 # What can we conclude from this boxplot?
@@ -1856,7 +1810,6 @@ plt.show()
 # Higher quality houses (with higher Overall Qual ratings) have a wider range of sale prices, indicating that they are generally more expensive.
 # This suggests that overall quality is a significant factor in determining the sale price of a house.
 ```
-
 
 ```python
 # We can also create new features based on existing ones to enhance our analysis.
@@ -1879,7 +1832,6 @@ df['Price per Sq Ft'] = df['SalePrice'] / df['Total Square Footage']
 
 ```
 
-
 ```python
 # Visualizing the new features
 plt.figure(figsize=(10, 6))
@@ -1890,12 +1842,7 @@ plt.ylabel("Sale Price")
 plt.show()
 ```
 
-
-    
 ![png](AmesHousingDataset_files/AmesHousingDataset_26_0.png)
-    
-
-
 
 ```python
 # What can we conclude from the boxplot?
@@ -1903,7 +1850,6 @@ plt.show()
 # As the total square footage of the house increases, the sale price also tends to increase.
 # This suggests that larger houses generally command higher prices in the real estate market.And ofcourse there are exceptions.
 ```
-
 
 ```python
 # Visualizing the relationship between House Age and Sale Price
@@ -1915,18 +1861,12 @@ plt.ylabel("Sale Price")
 plt.show()
 ```
 
-
-    
 ![png](AmesHousingDataset_files/AmesHousingDataset_28_0.png)
-    
-
-
 
 ```python
 # What can we conclude from the boxplot?
 # The scatter plot shows that there is a general trend where older houses tend to have lower sale prices.
 ```
-
 
 ```python
 # Visualizing if the number of bathrooms affects the Sale Price
@@ -1939,18 +1879,12 @@ plt.show()
 
 ```
 
-
-    
 ![png](AmesHousingDataset_files/AmesHousingDataset_30_0.png)
-    
-
-
 
 ```python
 # What can we conclude from the barplot?
 # The bar plot shows that as the number of total bathrooms increases, the sale price also tends to increase.
 ```
-
 
 ```python
 # This is where we end the exploratory data analysis (EDA) for the Ames Housing dataset.
