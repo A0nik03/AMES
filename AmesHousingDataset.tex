@@ -1,0 +1,1293 @@
+\documentclass[11pt]{article}
+    \usepackage{helvet}
+    \renewcommand{\familydefault}{\sfdefault}
+
+
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Keep aspect ratio if custom image width or height is specified
+    \setkeys{Gin}{keepaspectratio}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fontspec}
+    \setmonofont{Fira Code}
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \makeatletter
+    \newsavebox\pandoc@box
+    \newcommand*\pandocbounded[1]{%
+      \sbox\pandoc@box{#1}%
+      % scaling factors for width and height
+      \Gscale@div\@tempa\textheight{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+      \Gscale@div\@tempb\linewidth{\wd\pandoc@box}%
+      % select the smaller of both
+      \ifdim\@tempb\p@<\@tempa\p@
+        \let\@tempa\@tempb
+      \fi
+      % scaling accordingly (\@tempa < 1)
+      \ifdim\@tempa\p@<\p@
+        \scalebox{\@tempa}{\usebox\pandoc@box}%
+      % scaling not needed, use as it is
+      \else
+        \usebox{\pandoc@box}%
+      \fi
+    }
+    \makeatother
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{AmesHousingDataset}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@ges}{\let\PY@bf=\textbf\let\PY@it=\textit}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} We\PYZsq{}re going to explore the \PYZdq{}Ames Housing\PYZdq{} dataset, which contains information about houses in Ames, Iowa.}
+\PY{c+c1}{\PYZsh{} The dataset is available at https://www.kaggle.com/datasets/shashanknecrothapa/ames\PYZhy{}housing\PYZhy{}dataset}
+\PY{c+c1}{\PYZsh{} We\PYZsq{}ll be learning about data exploration, cleaning, and visualization using pandas and seaborn.}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Import necessary libraries}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{pandas}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{pd}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{numpy}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{np}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{plt}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{seaborn}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{sns}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Import the dataset}
+\PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C:}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Users}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{nikrc}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{OneDrive}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Desktop}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Datasets}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{AmesHousing.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{pd}\PY{o}{.}\PY{n}{set\PYZus{}option}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{display.max\PYZus{}columns}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{k+kc}{None}\PY{p}{)}  \PY{c+c1}{\PYZsh{} To Show all columns in the DataFrame}
+\PY{n}{df}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+   Order        PID  MS SubClass MS Zoning  Lot Frontage  Lot Area Street  \textbackslash{}
+0      1  526301100           20        RL         141.0     31770   Pave
+1      2  526350040           20        RH          80.0     11622   Pave
+2      3  526351010           20        RL          81.0     14267   Pave
+3      4  526353030           20        RL          93.0     11160   Pave
+4      5  527105010           60        RL          74.0     13830   Pave
+5      6  527105030           60        RL          78.0      9978   Pave
+6      7  527127150          120        RL          41.0      4920   Pave
+7      8  527145080          120        RL          43.0      5005   Pave
+8      9  527146030          120        RL          39.0      5389   Pave
+9     10  527162130           60        RL          60.0      7500   Pave
+
+  Alley Lot Shape Land Contour Utilities Lot Config Land Slope Neighborhood  \textbackslash{}
+0   NaN       IR1          Lvl    AllPub     Corner        Gtl        NAmes
+1   NaN       Reg          Lvl    AllPub     Inside        Gtl        NAmes
+2   NaN       IR1          Lvl    AllPub     Corner        Gtl        NAmes
+3   NaN       Reg          Lvl    AllPub     Corner        Gtl        NAmes
+4   NaN       IR1          Lvl    AllPub     Inside        Gtl      Gilbert
+5   NaN       IR1          Lvl    AllPub     Inside        Gtl      Gilbert
+6   NaN       Reg          Lvl    AllPub     Inside        Gtl      StoneBr
+7   NaN       IR1          HLS    AllPub     Inside        Gtl      StoneBr
+8   NaN       IR1          Lvl    AllPub     Inside        Gtl      StoneBr
+9   NaN       Reg          Lvl    AllPub     Inside        Gtl      Gilbert
+
+  Condition 1 Condition 2 Bldg Type House Style  Overall Qual  Overall Cond  \textbackslash{}
+0        Norm        Norm      1Fam      1Story             6             5
+1       Feedr        Norm      1Fam      1Story             5             6
+2        Norm        Norm      1Fam      1Story             6             6
+3        Norm        Norm      1Fam      1Story             7             5
+4        Norm        Norm      1Fam      2Story             5             5
+5        Norm        Norm      1Fam      2Story             6             6
+6        Norm        Norm    TwnhsE      1Story             8             5
+7        Norm        Norm    TwnhsE      1Story             8             5
+8        Norm        Norm    TwnhsE      1Story             8             5
+9        Norm        Norm      1Fam      2Story             7             5
+
+   Year Built  Year Remod/Add Roof Style Roof Matl Exterior 1st Exterior 2nd  \textbackslash{}
+0        1960            1960        Hip   CompShg      BrkFace      Plywood
+1        1961            1961      Gable   CompShg      VinylSd      VinylSd
+2        1958            1958        Hip   CompShg      Wd Sdng      Wd Sdng
+3        1968            1968        Hip   CompShg      BrkFace      BrkFace
+4        1997            1998      Gable   CompShg      VinylSd      VinylSd
+5        1998            1998      Gable   CompShg      VinylSd      VinylSd
+6        2001            2001      Gable   CompShg      CemntBd      CmentBd
+7        1992            1992      Gable   CompShg      HdBoard      HdBoard
+8        1995            1996      Gable   CompShg      CemntBd      CmentBd
+9        1999            1999      Gable   CompShg      VinylSd      VinylSd
+
+  Mas Vnr Type  Mas Vnr Area Exter Qual Exter Cond Foundation Bsmt Qual  \textbackslash{}
+0        Stone         112.0         TA         TA     CBlock        TA
+1          NaN           0.0         TA         TA     CBlock        TA
+2      BrkFace         108.0         TA         TA     CBlock        TA
+3          NaN           0.0         Gd         TA     CBlock        TA
+4          NaN           0.0         TA         TA      PConc        Gd
+5      BrkFace          20.0         TA         TA      PConc        TA
+6          NaN           0.0         Gd         TA      PConc        Gd
+7          NaN           0.0         Gd         TA      PConc        Gd
+8          NaN           0.0         Gd         TA      PConc        Gd
+9          NaN           0.0         TA         TA      PConc        TA
+
+  Bsmt Cond Bsmt Exposure BsmtFin Type 1  BsmtFin SF 1 BsmtFin Type 2  \textbackslash{}
+0        Gd            Gd            BLQ         639.0            Unf
+1        TA            No            Rec         468.0            LwQ
+2        TA            No            ALQ         923.0            Unf
+3        TA            No            ALQ        1065.0            Unf
+4        TA            No            GLQ         791.0            Unf
+5        TA            No            GLQ         602.0            Unf
+6        TA            Mn            GLQ         616.0            Unf
+7        TA            No            ALQ         263.0            Unf
+8        TA            No            GLQ        1180.0            Unf
+9        TA            No            Unf           0.0            Unf
+
+   BsmtFin SF 2  Bsmt Unf SF  Total Bsmt SF Heating Heating QC Central Air  \textbackslash{}
+0           0.0        441.0         1080.0    GasA         Fa           Y
+1         144.0        270.0          882.0    GasA         TA           Y
+2           0.0        406.0         1329.0    GasA         TA           Y
+3           0.0       1045.0         2110.0    GasA         Ex           Y
+4           0.0        137.0          928.0    GasA         Gd           Y
+5           0.0        324.0          926.0    GasA         Ex           Y
+6           0.0        722.0         1338.0    GasA         Ex           Y
+7           0.0       1017.0         1280.0    GasA         Ex           Y
+8           0.0        415.0         1595.0    GasA         Ex           Y
+9           0.0        994.0          994.0    GasA         Gd           Y
+
+  Electrical  1st Flr SF  2nd Flr SF  Low Qual Fin SF  Gr Liv Area  \textbackslash{}
+0      SBrkr        1656           0                0         1656
+1      SBrkr         896           0                0          896
+2      SBrkr        1329           0                0         1329
+3      SBrkr        2110           0                0         2110
+4      SBrkr         928         701                0         1629
+5      SBrkr         926         678                0         1604
+6      SBrkr        1338           0                0         1338
+7      SBrkr        1280           0                0         1280
+8      SBrkr        1616           0                0         1616
+9      SBrkr        1028         776                0         1804
+
+   Bsmt Full Bath  Bsmt Half Bath  Full Bath  Half Bath  Bedroom AbvGr  \textbackslash{}
+0             1.0             0.0          1          0              3
+1             0.0             0.0          1          0              2
+2             0.0             0.0          1          1              3
+3             1.0             0.0          2          1              3
+4             0.0             0.0          2          1              3
+5             0.0             0.0          2          1              3
+6             1.0             0.0          2          0              2
+7             0.0             0.0          2          0              2
+8             1.0             0.0          2          0              2
+9             0.0             0.0          2          1              3
+
+   Kitchen AbvGr Kitchen Qual  TotRms AbvGrd Functional  Fireplaces  \textbackslash{}
+0              1           TA              7        Typ           2
+1              1           TA              5        Typ           0
+2              1           Gd              6        Typ           0
+3              1           Ex              8        Typ           2
+4              1           TA              6        Typ           1
+5              1           Gd              7        Typ           1
+6              1           Gd              6        Typ           0
+7              1           Gd              5        Typ           0
+8              1           Gd              5        Typ           1
+9              1           Gd              7        Typ           1
+
+  Fireplace Qu Garage Type  Garage Yr Blt Garage Finish  Garage Cars  \textbackslash{}
+0           Gd      Attchd         1960.0           Fin          2.0
+1          NaN      Attchd         1961.0           Unf          1.0
+2          NaN      Attchd         1958.0           Unf          1.0
+3           TA      Attchd         1968.0           Fin          2.0
+4           TA      Attchd         1997.0           Fin          2.0
+5           Gd      Attchd         1998.0           Fin          2.0
+6          NaN      Attchd         2001.0           Fin          2.0
+7          NaN      Attchd         1992.0           RFn          2.0
+8           TA      Attchd         1995.0           RFn          2.0
+9           TA      Attchd         1999.0           Fin          2.0
+
+   Garage Area Garage Qual Garage Cond Paved Drive  Wood Deck SF  \textbackslash{}
+0        528.0          TA          TA           P           210
+1        730.0          TA          TA           Y           140
+2        312.0          TA          TA           Y           393
+3        522.0          TA          TA           Y             0
+4        482.0          TA          TA           Y           212
+5        470.0          TA          TA           Y           360
+6        582.0          TA          TA           Y             0
+7        506.0          TA          TA           Y             0
+8        608.0          TA          TA           Y           237
+9        442.0          TA          TA           Y           140
+
+   Open Porch SF  Enclosed Porch  3Ssn Porch  Screen Porch  Pool Area Pool QC  \textbackslash{}
+0             62               0           0             0          0     NaN
+1              0               0           0           120          0     NaN
+2             36               0           0             0          0     NaN
+3              0               0           0             0          0     NaN
+4             34               0           0             0          0     NaN
+5             36               0           0             0          0     NaN
+6              0             170           0             0          0     NaN
+7             82               0           0           144          0     NaN
+8            152               0           0             0          0     NaN
+9             60               0           0             0          0     NaN
+
+   Fence Misc Feature  Misc Val  Mo Sold  Yr Sold Sale Type Sale Condition  \textbackslash{}
+0    NaN          NaN         0        5     2010       WD          Normal
+1  MnPrv          NaN         0        6     2010       WD          Normal
+2    NaN         Gar2     12500        6     2010       WD          Normal
+3    NaN          NaN         0        4     2010       WD          Normal
+4  MnPrv          NaN         0        3     2010       WD          Normal
+5    NaN          NaN         0        6     2010       WD          Normal
+6    NaN          NaN         0        4     2010       WD          Normal
+7    NaN          NaN         0        1     2010       WD          Normal
+8    NaN          NaN         0        3     2010       WD          Normal
+9    NaN          NaN         0        6     2010       WD          Normal
+
+   SalePrice
+0     215000
+1     105000
+2     172000
+3     244000
+4     189900
+5     195500
+6     213500
+7     191500
+8     236500
+9     189000
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Why do we use this?}
+\PY{c+c1}{\PYZsh{} To suppress FutureWarnings that may arise from using deprecated features in libraries like pandas or numpy.}
+\PY{c+c1}{\PYZsh{} This is useful to keep the output clean, especially when running scripts that may generate many warnings.}
+
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{warnings}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ignore}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{category}\PY{o}{=}\PY{n+ne}{FutureWarning}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Check the shape of the Dataset}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The dataset has }\PY{l+s+si}{\PYZob{}}\PY{n}{df}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ rows and }\PY{l+s+si}{\PYZob{}}\PY{n}{df}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ columns.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+The dataset has 2930 rows and 82 columns.
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} View Columns types and non\PYZhy{}null counts}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 2930 entries, 0 to 2929
+Data columns (total 82 columns):
+ \#   Column           Non-Null Count  Dtype
+---  ------           --------------  -----
+ 0   Order            2930 non-null   int64
+ 1   PID              2930 non-null   int64
+ 2   MS SubClass      2930 non-null   int64
+ 3   MS Zoning        2930 non-null   object
+ 4   Lot Frontage     2440 non-null   float64
+ 5   Lot Area         2930 non-null   int64
+ 6   Street           2930 non-null   object
+ 7   Alley            198 non-null    object
+ 8   Lot Shape        2930 non-null   object
+ 9   Land Contour     2930 non-null   object
+ 10  Utilities        2930 non-null   object
+ 11  Lot Config       2930 non-null   object
+ 12  Land Slope       2930 non-null   object
+ 13  Neighborhood     2930 non-null   object
+ 14  Condition 1      2930 non-null   object
+ 15  Condition 2      2930 non-null   object
+ 16  Bldg Type        2930 non-null   object
+ 17  House Style      2930 non-null   object
+ 18  Overall Qual     2930 non-null   int64
+ 19  Overall Cond     2930 non-null   int64
+ 20  Year Built       2930 non-null   int64
+ 21  Year Remod/Add   2930 non-null   int64
+ 22  Roof Style       2930 non-null   object
+ 23  Roof Matl        2930 non-null   object
+ 24  Exterior 1st     2930 non-null   object
+ 25  Exterior 2nd     2930 non-null   object
+ 26  Mas Vnr Type     1155 non-null   object
+ 27  Mas Vnr Area     2907 non-null   float64
+ 28  Exter Qual       2930 non-null   object
+ 29  Exter Cond       2930 non-null   object
+ 30  Foundation       2930 non-null   object
+ 31  Bsmt Qual        2850 non-null   object
+ 32  Bsmt Cond        2850 non-null   object
+ 33  Bsmt Exposure    2847 non-null   object
+ 34  BsmtFin Type 1   2850 non-null   object
+ 35  BsmtFin SF 1     2929 non-null   float64
+ 36  BsmtFin Type 2   2849 non-null   object
+ 37  BsmtFin SF 2     2929 non-null   float64
+ 38  Bsmt Unf SF      2929 non-null   float64
+ 39  Total Bsmt SF    2929 non-null   float64
+ 40  Heating          2930 non-null   object
+ 41  Heating QC       2930 non-null   object
+ 42  Central Air      2930 non-null   object
+ 43  Electrical       2929 non-null   object
+ 44  1st Flr SF       2930 non-null   int64
+ 45  2nd Flr SF       2930 non-null   int64
+ 46  Low Qual Fin SF  2930 non-null   int64
+ 47  Gr Liv Area      2930 non-null   int64
+ 48  Bsmt Full Bath   2928 non-null   float64
+ 49  Bsmt Half Bath   2928 non-null   float64
+ 50  Full Bath        2930 non-null   int64
+ 51  Half Bath        2930 non-null   int64
+ 52  Bedroom AbvGr    2930 non-null   int64
+ 53  Kitchen AbvGr    2930 non-null   int64
+ 54  Kitchen Qual     2930 non-null   object
+ 55  TotRms AbvGrd    2930 non-null   int64
+ 56  Functional       2930 non-null   object
+ 57  Fireplaces       2930 non-null   int64
+ 58  Fireplace Qu     1508 non-null   object
+ 59  Garage Type      2773 non-null   object
+ 60  Garage Yr Blt    2771 non-null   float64
+ 61  Garage Finish    2771 non-null   object
+ 62  Garage Cars      2929 non-null   float64
+ 63  Garage Area      2929 non-null   float64
+ 64  Garage Qual      2771 non-null   object
+ 65  Garage Cond      2771 non-null   object
+ 66  Paved Drive      2930 non-null   object
+ 67  Wood Deck SF     2930 non-null   int64
+ 68  Open Porch SF    2930 non-null   int64
+ 69  Enclosed Porch   2930 non-null   int64
+ 70  3Ssn Porch       2930 non-null   int64
+ 71  Screen Porch     2930 non-null   int64
+ 72  Pool Area        2930 non-null   int64
+ 73  Pool QC          13 non-null     object
+ 74  Fence            572 non-null    object
+ 75  Misc Feature     106 non-null    object
+ 76  Misc Val         2930 non-null   int64
+ 77  Mo Sold          2930 non-null   int64
+ 78  Yr Sold          2930 non-null   int64
+ 79  Sale Type        2930 non-null   object
+ 80  Sale Condition   2930 non-null   object
+ 81  SalePrice        2930 non-null   int64
+dtypes: float64(11), int64(28), object(43)
+memory usage: 1.8+ MB
+None
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Descriptive statistics of the dataset}
+\PY{c+c1}{\PYZsh{} This provides a summary of the central tendency, dispersion, and shape of the dataset\PYZsq{}s distribution,}
+\PY{n}{df}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{T}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                  count          mean           std          min  \textbackslash{}
+Order            2930.0  1.465500e+03  8.459625e+02          1.0
+PID              2930.0  7.144645e+08  1.887308e+08  526301100.0
+MS SubClass      2930.0  5.738737e+01  4.263802e+01         20.0
+Lot Frontage     2440.0  6.922459e+01  2.336533e+01         21.0
+Lot Area         2930.0  1.014792e+04  7.880018e+03       1300.0
+Overall Qual     2930.0  6.094881e+00  1.411026e+00          1.0
+Overall Cond     2930.0  5.563140e+00  1.111537e+00          1.0
+Year Built       2930.0  1.971356e+03  3.024536e+01       1872.0
+Year Remod/Add   2930.0  1.984267e+03  2.086029e+01       1950.0
+Mas Vnr Area     2907.0  1.018968e+02  1.791126e+02          0.0
+BsmtFin SF 1     2929.0  4.426296e+02  4.555908e+02          0.0
+BsmtFin SF 2     2929.0  4.972243e+01  1.691685e+02          0.0
+Bsmt Unf SF      2929.0  5.592625e+02  4.394942e+02          0.0
+Total Bsmt SF    2929.0  1.051615e+03  4.406151e+02          0.0
+1st Flr SF       2930.0  1.159558e+03  3.918909e+02        334.0
+2nd Flr SF       2930.0  3.354560e+02  4.283957e+02          0.0
+Low Qual Fin SF  2930.0  4.676792e+00  4.631051e+01          0.0
+Gr Liv Area      2930.0  1.499690e+03  5.055089e+02        334.0
+Bsmt Full Bath   2928.0  4.313525e-01  5.248202e-01          0.0
+Bsmt Half Bath   2928.0  6.113388e-02  2.452536e-01          0.0
+Full Bath        2930.0  1.566553e+00  5.529406e-01          0.0
+Half Bath        2930.0  3.795222e-01  5.026293e-01          0.0
+Bedroom AbvGr    2930.0  2.854266e+00  8.277311e-01          0.0
+Kitchen AbvGr    2930.0  1.044369e+00  2.140762e-01          0.0
+TotRms AbvGrd    2930.0  6.443003e+00  1.572964e+00          2.0
+Fireplaces       2930.0  5.993174e-01  6.479209e-01          0.0
+Garage Yr Blt    2771.0  1.978132e+03  2.552841e+01       1895.0
+Garage Cars      2929.0  1.766815e+00  7.605664e-01          0.0
+Garage Area      2929.0  4.728197e+02  2.150465e+02          0.0
+Wood Deck SF     2930.0  9.375188e+01  1.263616e+02          0.0
+Open Porch SF    2930.0  4.753345e+01  6.748340e+01          0.0
+Enclosed Porch   2930.0  2.301160e+01  6.413906e+01          0.0
+3Ssn Porch       2930.0  2.592491e+00  2.514133e+01          0.0
+Screen Porch     2930.0  1.600205e+01  5.608737e+01          0.0
+Pool Area        2930.0  2.243345e+00  3.559718e+01          0.0
+Misc Val         2930.0  5.063515e+01  5.663443e+02          0.0
+Mo Sold          2930.0  6.216041e+00  2.714492e+00          1.0
+Yr Sold          2930.0  2.007790e+03  1.316613e+00       2006.0
+SalePrice        2930.0  1.807961e+05  7.988669e+04      12789.0
+
+                          25\%          50\%           75\%           max
+Order            7.332500e+02       1465.5  2.197750e+03  2.930000e+03
+PID              5.284770e+08  535453620.0  9.071811e+08  1.007100e+09
+MS SubClass      2.000000e+01         50.0  7.000000e+01  1.900000e+02
+Lot Frontage     5.800000e+01         68.0  8.000000e+01  3.130000e+02
+Lot Area         7.440250e+03       9436.5  1.155525e+04  2.152450e+05
+Overall Qual     5.000000e+00          6.0  7.000000e+00  1.000000e+01
+Overall Cond     5.000000e+00          5.0  6.000000e+00  9.000000e+00
+Year Built       1.954000e+03       1973.0  2.001000e+03  2.010000e+03
+Year Remod/Add   1.965000e+03       1993.0  2.004000e+03  2.010000e+03
+Mas Vnr Area     0.000000e+00          0.0  1.640000e+02  1.600000e+03
+BsmtFin SF 1     0.000000e+00        370.0  7.340000e+02  5.644000e+03
+BsmtFin SF 2     0.000000e+00          0.0  0.000000e+00  1.526000e+03
+Bsmt Unf SF      2.190000e+02        466.0  8.020000e+02  2.336000e+03
+Total Bsmt SF    7.930000e+02        990.0  1.302000e+03  6.110000e+03
+1st Flr SF       8.762500e+02       1084.0  1.384000e+03  5.095000e+03
+2nd Flr SF       0.000000e+00          0.0  7.037500e+02  2.065000e+03
+Low Qual Fin SF  0.000000e+00          0.0  0.000000e+00  1.064000e+03
+Gr Liv Area      1.126000e+03       1442.0  1.742750e+03  5.642000e+03
+Bsmt Full Bath   0.000000e+00          0.0  1.000000e+00  3.000000e+00
+Bsmt Half Bath   0.000000e+00          0.0  0.000000e+00  2.000000e+00
+Full Bath        1.000000e+00          2.0  2.000000e+00  4.000000e+00
+Half Bath        0.000000e+00          0.0  1.000000e+00  2.000000e+00
+Bedroom AbvGr    2.000000e+00          3.0  3.000000e+00  8.000000e+00
+Kitchen AbvGr    1.000000e+00          1.0  1.000000e+00  3.000000e+00
+TotRms AbvGrd    5.000000e+00          6.0  7.000000e+00  1.500000e+01
+Fireplaces       0.000000e+00          1.0  1.000000e+00  4.000000e+00
+Garage Yr Blt    1.960000e+03       1979.0  2.002000e+03  2.207000e+03
+Garage Cars      1.000000e+00          2.0  2.000000e+00  5.000000e+00
+Garage Area      3.200000e+02        480.0  5.760000e+02  1.488000e+03
+Wood Deck SF     0.000000e+00          0.0  1.680000e+02  1.424000e+03
+Open Porch SF    0.000000e+00         27.0  7.000000e+01  7.420000e+02
+Enclosed Porch   0.000000e+00          0.0  0.000000e+00  1.012000e+03
+3Ssn Porch       0.000000e+00          0.0  0.000000e+00  5.080000e+02
+Screen Porch     0.000000e+00          0.0  0.000000e+00  5.760000e+02
+Pool Area        0.000000e+00          0.0  0.000000e+00  8.000000e+02
+Misc Val         0.000000e+00          0.0  0.000000e+00  1.700000e+04
+Mo Sold          4.000000e+00          6.0  8.000000e+00  1.200000e+01
+Yr Sold          2.007000e+03       2008.0  2.009000e+03  2.010000e+03
+SalePrice        1.295000e+05     160000.0  2.135000e+05  7.550000e+05
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Total Missing Values per Column}
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+Pool QC           2917
+Misc Feature      2824
+Alley             2732
+Fence             2358
+Mas Vnr Type      1775
+Fireplace Qu      1422
+Lot Frontage       490
+Garage Qual        159
+Garage Yr Blt      159
+Garage Cond        159
+Garage Finish      159
+Garage Type        157
+Bsmt Exposure       83
+BsmtFin Type 2      81
+Bsmt Qual           80
+Bsmt Cond           80
+BsmtFin Type 1      80
+Mas Vnr Area        23
+Bsmt Full Bath       2
+Bsmt Half Bath       2
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Lot Frontage}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Lot Frontage}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{33}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Alley}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Alley}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mode}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{54}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Total Missing Values per Column}
+\PY{n}{missing\PYZus{}values} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{df}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{100}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Percentage of Missing Values per Column:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{missing\PYZus{}values}\PY{p}{[}\PY{n}{missing\PYZus{}values} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Percentage of Missing Values per Column:
+Series([], dtype: float64)
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{38}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}  Dropping Columns with more than 50\PYZpc{} missing values}
+\PY{n}{threshold} \PY{o}{=} \PY{l+m+mf}{0.5}
+\PY{n}{cols} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{n}{missing\PYZus{}values} \PY{o}{\PYZgt{}} \PY{n}{threshold}\PY{p}{]}
+\PY{n}{df}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{cols}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Mode fill for discrete(categorical) features}
+\PY{n}{mode\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Bsmt Half Bath}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Bsmt Full Bath}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Electrical}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{k}{for} \PY{n}{col} \PY{o+ow}{in} \PY{n}{mode\PYZus{}cols}\PY{p}{:}
+    \PY{n}{df}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{mode}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Median fill for numeric features}
+\PY{n}{median\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BsmtFin SF 1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BsmtFin SF 2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Bsmt Unf SF}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Total Bsmt SF}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Garage Cars}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Garage Area}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{k}{for} \PY{n}{col} \PY{o+ow}{in} \PY{n}{median\PYZus{}cols}\PY{p}{:}
+    \PY{n}{df}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{median}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{59}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Checking the percentage of missing values after filling}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Percentage of Missing Values after filling:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)} \PY{o}{/} \PY{n+nb}{len}\PY{p}{(}\PY{n}{df}\PY{p}{)}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{100}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Percentage of Missing Values after filling:
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{59}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+Order             0.0
+PID               0.0
+MS SubClass       0.0
+MS Zoning         0.0
+Lot Frontage      0.0
+                 {\ldots}
+Mo Sold           0.0
+Yr Sold           0.0
+Sale Type         0.0
+Sale Condition    0.0
+SalePrice         0.0
+Length: 66, dtype: float64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} What is Correlation Matrix ?}
+\PY{c+c1}{\PYZsh{} The correlation matrix is a table that shows the correlation coefficients between many variables.}
+\PY{c+c1}{\PYZsh{} Each cell in the table displays the correlation between two variables.}
+\PY{c+c1}{\PYZsh{} The value is between \PYZhy{}1 and 1. A value closer to 1 means a strong positive correlation, while a value closer to \PYZhy{}1 means a strong negative correlation.}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{67}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Correlation Matrix}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Selecting only numeric data for correlation matrix}
+\PY{n}{numeric\PYZus{}data} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{select\PYZus{}dtypes}\PY{p}{(}\PY{n}{include} \PY{o}{=} \PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{number}\PY{p}{]}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} Note: numeric\PYZus{}data.corr(): It returns a correlation matrix of only the numeric columns in your DataFrame.}
+\PY{n}{sns}\PY{o}{.}\PY{n}{heatmap}\PY{p}{(}\PY{n}{numeric\PYZus{}data}\PY{o}{.}\PY{n}{corr}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{cmap} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{coolwarm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{annot}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,}\PY{n}{linewidths}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Correlation Matrix}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{AmesHousingDataset_files/AmesHousingDataset_15_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{72}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Price Distribution}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{histplot}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{kde} \PY{o}{=} \PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Sale Price Distribution}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Sales Price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Frequency}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{AmesHousingDataset_files/AmesHousingDataset_16_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Clearly the distribution is right skewed, indicating that most houses are sold at lower prices, with fewer houses sold at higher prices.}
+\PY{c+c1}{\PYZsh{} There are a few outliers on the higher end of the price spectrum, which is common in real estate data.}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} There\PYZsq{}s a way to find outliers using the Interquartile Range (IQR) method.}
+\PY{c+c1}{\PYZsh{} Steps to find outliers using IQR:}
+\PY{c+c1}{\PYZsh{} 1. Calculate the first quartile (Q1) and third quartile (Q3) of the data.}
+\PY{c+c1}{\PYZsh{} 2. Compute the interquartile range (IQR) as Q3 \PYZhy{} Q1.}
+\PY{c+c1}{\PYZsh{} 3. Determine the lower bound as Q1 \PYZhy{} 1.5 * IQR and the upper bound as Q3 + 1.5 * IQR.}
+\PY{c+c1}{\PYZsh{} 4. Any data point outside these bounds is considered an outlier.}
+
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{find\PYZus{}outliers\PYZus{}iqr}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{:}
+    \PY{n}{Q1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{percentile}\PY{p}{(}\PY{n}{data}\PY{p}{,}\PY{l+m+mi}{25}\PY{p}{)}
+    \PY{n}{Q3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{percentile}\PY{p}{(}\PY{n}{data}\PY{p}{,}\PY{l+m+mi}{75}\PY{p}{)}
+    \PY{n}{IQR} \PY{o}{=} \PY{n}{Q3} \PY{o}{\PYZhy{}} \PY{n}{Q1}
+    \PY{n}{lower\PYZus{}bound} \PY{o}{=} \PY{n}{Q1} \PY{o}{\PYZhy{}} \PY{l+m+mf}{1.5} \PY{o}{*} \PY{n}{IQR}
+    \PY{n}{upper\PYZus{}bound} \PY{o}{=} \PY{n}{Q3} \PY{o}{+} \PY{l+m+mf}{1.5} \PY{o}{*} \PY{n}{IQR}
+    \PY{n}{outliers} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{(}\PY{n}{data} \PY{o}{\PYZlt{}} \PY{n}{lower\PYZus{}bound}\PY{p}{)} \PY{o}{|} \PY{p}{(}\PY{n}{data} \PY{o}{\PYZgt{}} \PY{n}{upper\PYZus{}bound}\PY{p}{)}\PY{p}{]}
+    \PY{k}{return} \PY{n}{outliers}
+
+\PY{c+c1}{\PYZsh{} Finding outliers in SalePrice}
+\PY{n}{outliers} \PY{o}{=} \PY{n}{find\PYZus{}outliers\PYZus{}iqr}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of outliers in SalePrice: }\PY{l+s+si}{\PYZob{}}\PY{n+nb}{len}\PY{p}{(}\PY{n}{outliers}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+
+\PY{c+c1}{\PYZsh{} Note:}
+\PY{c+c1}{\PYZsh{} What to do with outliers?}
+\PY{c+c1}{\PYZsh{} 1. Remove them: If they are errors or not relevant to the analysis.}
+\PY{c+c1}{\PYZsh{} 2. Transform them: Use transformations like log or square root to reduce their impact.}
+\PY{c+c1}{\PYZsh{} 3. Keep them: If they are valid observations that provide important information.}
+
+\PY{c+c1}{\PYZsh{} For this dataset, we will keep the outliers as they may represent high\PYZhy{}value properties that are important for analysis.}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Number of outliers in SalePrice: 137
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{79}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Visualizing Outliers}
+\PY{c+c1}{\PYZsh{} Why do we visualize outliers?}
+\PY{c+c1}{\PYZsh{} Visualizing outliers helps to understand their distribution and impact on the dataset.}
+\PY{c+c1}{\PYZsh{} It allows us to see how they affect the overall analysis and whether they should be treated differently.}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{boxplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Boxplot of Sale Price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Sales Price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{AmesHousingDataset_files/AmesHousingDataset_19_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} What can we conclude from the boxplot?}
+\PY{c+c1}{\PYZsh{} The boxplot shows that the majority of the data is concentrated in the lower price range, with a few high\PYZhy{}value outliers.}
+\PY{c+c1}{\PYZsh{} The whiskers extend to the lower and upper bounds, while the outliers are represented as individual points beyond these bounds.}
+\PY{c+c1}{\PYZsh{} This indicates that while most houses are sold at lower prices, there are a few high\PYZhy{}value properties that significantly impact the average price.}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{90}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Finding highly correlated features with SalePrice}
+\PY{n}{numeric\PYZus{}df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{select\PYZus{}dtypes}\PY{p}{(}\PY{n}{include}\PY{o}{=}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{number}\PY{p}{]}\PY{p}{)}
+\PY{n}{correlation\PYZus{}matrix} \PY{o}{=} \PY{n}{numeric\PYZus{}df}\PY{o}{.}\PY{n}{corr}\PY{p}{(}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Selecting features with correlation greater than 0.5 with SalePrice}
+\PY{n}{highly\PYZus{}correlated\PYZus{}features} \PY{o}{=} \PY{n}{correlation\PYZus{}matrix}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{n+nb}{abs}\PY{p}{(}\PY{n}{correlation\PYZus{}matrix}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mf}{0.5}\PY{p}{]}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Features highly correlated with SalePrice:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{highly\PYZus{}correlated\PYZus{}features}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Features highly correlated with SalePrice:
+['Overall Qual', 'Year Built', 'Year Remod/Add', 'Total Bsmt SF', '1st Flr SF',
+'Gr Liv Area', 'Full Bath', 'Garage Cars', 'Garage Area', 'SalePrice',
+'LogSalePrice']
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}  Visualizing the relationship between SalePrice and highly correlated features}
+
+\PY{c+c1}{\PYZsh{} Sorting and plotting the top 10 features}
+\PY{n}{corr\PYZus{}matrix} \PY{o}{=} \PY{n}{correlation\PYZus{}matrix}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{top\PYZus{}10\PYZus{}features} \PY{o}{=} \PY{n}{corr\PYZus{}matrix}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{barplot}\PY{p}{(}\PY{n}{x} \PY{o}{=} \PY{n}{top\PYZus{}10\PYZus{}features}\PY{o}{.}\PY{n}{values}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{n}{top\PYZus{}10\PYZus{}features}\PY{o}{.}\PY{n}{index}\PY{p}{,} \PY{n}{palette}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{viridis}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Top 10 Features Correlated with SalePrice}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Features}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Correlation Coefficient}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{AmesHousingDataset_files/AmesHousingDataset_22_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} How does Overall Qual affect SalePrice?}
+\PY{n}{sns}\PY{o}{.}\PY{n}{boxplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Overall Qual}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{data}\PY{o}{=}\PY{n}{df}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SalePrice vs Overall Quality}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Overall Quality}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Sale Price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{AmesHousingDataset_files/AmesHousingDataset_23_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} What can we conclude from this boxplot?}
+\PY{c+c1}{\PYZsh{} The boxplot shows that as the overall quality of the house increases, the sale price also tends to increase.}
+\PY{c+c1}{\PYZsh{} Higher quality houses (with higher Overall Qual ratings) have a wider range of sale prices, indicating that they are generally more expensive.}
+\PY{c+c1}{\PYZsh{} This suggests that overall quality is a significant factor in determining the sale price of a house.}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{103}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} We can also create new features based on existing ones to enhance our analysis.}
+
+
+\PY{c+c1}{\PYZsh{} Total bathrooms}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Total Bathrooms}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Full Bath}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Half Bath}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Bsmt Full Bath}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Bsmt Half Bath}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} Total Square Footage}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Total Square Footage}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Gr Liv Area}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Total Bsmt SF}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Garage Area}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} House Age}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{House Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Yr Sold}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year Built}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} IsRemodelled}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{IsRemodelled}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year Remod/Add}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{!=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year Built}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Price per Square Foot}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Price per Sq Ft}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{/} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Total Square Footage}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{104}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Visualizing the new features}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{scatterplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Total Square Footage}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{data}\PY{o}{=}\PY{n}{df}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Total Square Footage vs Sale Price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Total Square Footage}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Sale Price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{AmesHousingDataset_files/AmesHousingDataset_26_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} What can we conclude from the boxplot?}
+\PY{c+c1}{\PYZsh{} The scatter plot shows a positive correlation between total square footage and sale price.}
+\PY{c+c1}{\PYZsh{} As the total square footage of the house increases, the sale price also tends to increase.}
+\PY{c+c1}{\PYZsh{} This suggests that larger houses generally command higher prices in the real estate market.And ofcourse there are exceptions.}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{105}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Visualizing the relationship between House Age and Sale Price}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{scatterplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{House Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{data}\PY{o}{=}\PY{n}{df}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{House Age vs Sale Price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{House Age (Years)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Sale Price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{AmesHousingDataset_files/AmesHousingDataset_28_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} What can we conclude from the boxplot?}
+\PY{c+c1}{\PYZsh{} The scatter plot shows that there is a general trend where older houses tend to have lower sale prices.}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{109}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Visualizing if the number of bathrooms affects the Sale Price}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{barplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Total Bathrooms}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{data}\PY{o}{=}\PY{n}{df}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Sale Price vs Total Bathrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Total Bathrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Sale Price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{AmesHousingDataset_files/AmesHousingDataset_30_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} What can we conclude from the barplot?}
+\PY{c+c1}{\PYZsh{} The bar plot shows that as the number of total bathrooms increases, the sale price also tends to increase.}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} This is where we end the exploratory data analysis (EDA) for the Ames Housing dataset.}
+\PY{c+c1}{\PYZsh{} We have explored the dataset, handled missing values, visualized distributions, identified outliers, and created new features.}
+\PY{c+c1}{\PYZsh{} Hope this analysis helps you understand the dataset better and provides insights into the factors affecting house prices in Ames, Iowa.}
+\PY{c+c1}{\PYZsh{} And I do hope if you could suggest any improvements or additional analyses that could be performed on this dataset, it would be greatly appreciated.}
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
